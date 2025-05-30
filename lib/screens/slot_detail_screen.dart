@@ -18,10 +18,8 @@ class SlotCard extends StatelessWidget {
         title: Text('Slot $slotNumber'),
         subtitle: Text('Status: $status'),
         trailing: const Icon(Icons.arrow_forward_ios),
-        onTap: () {
-          // Later we’ll add navigation to details screen
-        },
       ),
     );
   }
 }
+
