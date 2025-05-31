@@ -12,40 +12,49 @@ class SlotCard extends StatelessWidget {
     required this.status,
   });
 
-  void _toggleStatus(BuildContext context) {
-    final newStatus = status == 'Available' ? 'Occupied' : 'Available';
+  void _toggleBooking(BuildContext context) {
+    final isAvailable = status == 'Available';
+    final newStatus = isAvailable ? 'Booked' : 'Available';
     Provider.of<SlotProvider>(context, listen: false)
         .updateStatus(slotNumber, newStatus);
   }
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => _toggleStatus(context),
-      child: Card(
-        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        color: status == 'Available' ? Colors.green[100] : Colors.red[100],
-        elevation: 3,
-        child: ListTile(
-          leading: Icon(
-            status == 'Available' ? Icons.check_circle : Icons.cancel,
-            color: status == 'Available' ? Colors.green : Colors.red,
+    final isAvailable = status == 'Available';
+
+    return Card(
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      elevation: 3,
+      color: isAvailable ? Colors.green[100] : Colors.blue[100],
+      child: ListTile(
+        leading: Icon(
+          isAvailable ? Icons.check_circle : Icons.directions_car,
+          color: isAvailable ? Colors.green : Colors.blue,
+        ),
+        title: Text(
+          'Slot $slotNumber',
+          style: const TextStyle(fontWeight: FontWeight.bold),
+        ),
+        subtitle: Text(
+          status,
+          style: TextStyle(
+            color: isAvailable ? Colors.green : Colors.blue[900],
+            fontWeight: FontWeight.w600,
           ),
-          title: Text(
-            'Slot $slotNumber',
-            style: const TextStyle(fontWeight: FontWeight.bold),
+        ),
+        trailing: ElevatedButton(
+          onPressed: () => _toggleBooking(context),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: isAvailable ? Colors.green : Colors.red,
+            foregroundColor: Colors.white,
           ),
-          subtitle: Text(
-            status,
-            style: TextStyle(
-              color: status == 'Available' ? Colors.green : Colors.red,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
+          child: Text(isAvailable ? 'Book' : 'Cancel'),
         ),
       ),
     );
   }
 }
+
 
 
