@@ -1,8 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'screens/home_screen.dart';
+import 'providers/slot_provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => SlotProvider()),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -13,13 +22,14 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Smart Parking',
       theme: ThemeData(
-        primarySwatch: Colors.indigo,
-        scaffoldBackgroundColor: Colors.white,
+        primarySwatch: Colors.deepPurple,
+        fontFamily: 'Romanesco',
       ),
       home: const HomeScreen(),
     );
   }
 }
+
 
 
 

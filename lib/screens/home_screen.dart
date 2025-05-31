@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sprint2_dashbaord/widgets/slot_card.dart';
+import '../providers/slot_provider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -66,18 +68,17 @@ class SlotListPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<Map<String, dynamic>> slots = [
-      {'slotNumber': 1, 'status': 'Available'},
-      {'slotNumber': 2, 'status': 'Occupied'},
-      {'slotNumber': 3, 'status': 'Available'},
-    ];
-
-    return ListView.builder(
-      itemCount: slots.length,
-      itemBuilder: (context, index) {
-        return SlotCard(
-          slotNumber: slots[index]['slotNumber'],
-          status: slots[index]['status'],
+    return Consumer<SlotProvider>(
+      builder: (context, slotProvider, _) {
+        return ListView.builder(
+          itemCount: slotProvider.slots.length,
+          itemBuilder: (context, index) {
+            final slot = slotProvider.slots[index];
+            return SlotCard(
+              slotNumber: slot.slotNumber,
+              status: slot.status,
+            );
+          },
         );
       },
     );
@@ -168,6 +169,7 @@ class ProfilePage extends StatelessWidget {
     );
   }
 }
+
 
 
 
