@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../providers/slot_provider.dart';
 
 class SlotCard extends StatelessWidget {
   final int slotNumber;
@@ -10,58 +12,40 @@ class SlotCard extends StatelessWidget {
     required this.status,
   });
 
-  Color getStatusColor() {
-    return status == 'Available' ? Colors.green : Colors.red;
-  }
-
-  IconData getStatusIcon() {
-    return status == 'Available' ? Icons.check_circle : Icons.cancel;
+  void _toggleStatus(BuildContext context) {
+    final newStatus = status == 'Available' ? 'Occupied' : 'Available';
+    Provider.of<SlotProvider>(context, listen: false)
+        .updateStatus(slotNumber, newStatus);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 4,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
-      margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Row(
-          children: [
-            Icon(
-              getStatusIcon(),
-              color: getStatusColor(),
-              size: 32,
+    return GestureDetector(
+      onTap: () => _toggleStatus(context),
+      child: Card(
+        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        color: status == 'Available' ? Colors.green[100] : Colors.red[100],
+        elevation: 3,
+        child: ListTile(
+          leading: Icon(
+            status == 'Available' ? Icons.check_circle : Icons.cancel,
+            color: status == 'Available' ? Colors.green : Colors.red,
+          ),
+          title: Text(
+            'Slot $slotNumber',
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          ),
+          subtitle: Text(
+            status,
+            style: TextStyle(
+              color: status == 'Available' ? Colors.green : Colors.red,
+              fontWeight: FontWeight.w600,
             ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Slot $slotNumber',
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    'Status: $status',
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: getStatusColor(),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );
   }
 }
+
 
